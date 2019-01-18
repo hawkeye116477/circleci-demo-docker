@@ -1,6 +1,6 @@
 # https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/buildpack-deps/images/bionic/Dockerfile
 
-FROM buildpack-deps:cosmic
+FROM ubuntu:cosmic
 
 # make Apt non-interactive
 RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90circleci \
@@ -8,14 +8,7 @@ RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90circleci \
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# man directory is missing in some base images
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199
-RUN apt-get update \
-  && mkdir -p /usr/share/man/man1 \
-  && apt-get install -y \
-    git \
-    locales sudo openssh-client ca-certificates tar gzip parallel \
-net-tools unzip zip bzip2 gnupg curl wget tzdata language-pack-pl
+RUN apt-get update && apt-get install -y git locales sudo openssh-client ca-certificates tar gzip parallel net-tools unzip zip bzip2 gnupg curl wget tzdata language-pack-pl
 
 # Set timezone to UTC by default
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
@@ -69,13 +62,6 @@ RUN groupadd --gid 3434 circleci \
   && echo 'circleci ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-circleci \
   && echo 'Defaults    env_keep += "DEBIAN_FRONTEND"' >> /etc/sudoers.d/env_keep
 
-# BEGIN IMAGE CUSTOMIZATIONS
-
-# END IMAGE CUSTOMIZATIONS
-
 USER circleci
 
 CMD ["/bin/sh"]
-
-LABEL com.circleci.preserve-entrypoint=true
-ENTRYPOINT contacts
