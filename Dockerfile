@@ -8,7 +8,7 @@ RUN echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90circleci \
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y git locales sudo openssh-client ca-certificates tar gzip parallel net-tools unzip zip bzip2 gnupg curl wget tzdata language-pack-pl
+RUN apt-get update && apt-get install -y git locales sudo openssh-client ca-certificates tar gzip parallel net-tools unzip zip bzip2 gnupg curl wget tzdata language-pack-pl jq
 
 # Set the locale
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
